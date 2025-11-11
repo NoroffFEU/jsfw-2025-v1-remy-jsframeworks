@@ -1,13 +1,22 @@
 import { useEffect, useState } from 'react';
 import { apiGet } from '../api/client';
 
-export function useApi<T>(url: string) {
+export function useApi<T>(url: string | null) {
   const [data, setData] = useState<T | null>(null);
   const [isLoading, setLoading] = useState(true);
   const [isError, setError] = useState<unknown | null>(null);
 
   useEffect(() => {
     let alive = true;
+
+    // If no URL, do nothing (but keep hook call order consistent)
+    if (!url) {
+      setLoading(false);
+      setData(null);
+      setError(null);
+      return () => { alive = false; };
+    }
+
     (async () => {
       setLoading(true);
       setError(null);
@@ -20,6 +29,7 @@ export function useApi<T>(url: string) {
         if (alive) setLoading(false);
       }
     })();
+
     return () => { alive = false; };
   }, [url]);
 
