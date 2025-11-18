@@ -1,29 +1,31 @@
 import { useParams, Link } from 'react-router-dom';
-import { useApi } from '../../hooks/useApi';
-import { ONLINE_SHOP_ITEM } from '../../api/endpoints';
-import { ApiItemResponse, Product } from '../../types/product';
 import { formatCurrency } from '../../utils/currency';
 import { getDiscountPercent } from '../../utils/discount';
+import { useProductQuery } from '../../api/queries/products';
+import { useCart } from '../../store/useCart';
+import { toCartItem } from '../../types/cart';
 
 export default function ProductPage() {
   const { id } = useParams<{ id: string }>();
-  const url = id ? ONLINE_SHOP_ITEM(id) : null;
 
-  // Hook is called every render. 
-  const { data, isLoading, isError } = useApi<ApiItemResponse<Product>>(url);
+  const { data, isLoading, isError } = useProductQuery(id);
+  const { addItem } = useCart();
 
-  // so now, I can render conditionally
   if (!id) return <div className="p-6">Invalid product id.</div>;
   if (isLoading) return <div className="p-6">Loading product…</div>;
-  if (isError)   return <div className="p-6 text-red-600">Failed to load product.</div>;
-  if (!data)     return <div className="p-6">No product data.</div>;
+  if (isError) return <div className="p-6 text-red-600">Failed to load product.</div>;
+  if (!data) return <div className="p-6">No product data.</div>;
 
   const p = data.data;
   const hasDiscount = p.discountedPrice < p.price;
   const pct = getDiscountPercent(p.price, p.discountedPrice);
 
+  function handleAddToCart() {
+    addItem(toCartItem(p, 1));
+  }
+
   return (
- <main className="mx-auto max-w-5xl p-4">
+    <main className="mx-auto max-w-5xl p-4">
       <div className="mb-4">
         <Link to="/products" className="text-blue-600 underline">
           ← Back to products
@@ -50,43 +52,32 @@ export default function ProductPage() {
         <div>
           <h1 className="text-2xl font-semibold">{p.title}</h1>
 
-          {/* Price & discount section */}
+          {/* Price & discount */}
           <div className="mt-2 flex items-baseline gap-3">
             {hasDiscount ? (
               <>
-                {/* Discounted price */}
                 <span className="text-2xl font-bold text-green-700">
                   {formatCurrency(p.discountedPrice)}
                 </span>
-
-                {/* Original price */}
                 <span className="text-neutral-500 line-through">
                   {formatCurrency(p.price)}
                 </span>
-
-                {/* Discount percentage */}
                 <span className="rounded bg-red-600 px-2 py-0.5 text-xs font-semibold text-white">
                   -{pct}%
                 </span>
               </>
             ) : (
-              <span className="text-2xl font-bold">
-                {formatCurrency(p.price)}
-              </span>
+              <span className="text-2xl font-bold">{formatCurrency(p.price)}</span>
             )}
           </div>
 
           {/* Rating */}
           {typeof p.rating === 'number' && (
-            <div className="mt-2 text-sm text-neutral-700">
-                Rating: {p.rating.toFixed(1)}
-            </div>
+            <div className="mt-2 text-sm text-neutral-700">Rating: {p.rating.toFixed(1)}</div>
           )}
 
           {/* Description */}
-          {p.description && (
-            <p className="mt-4 whitespace-pre-wrap">{p.description}</p>
-          )}
+          {p.description && <p className="mt-4 whitespace-pre-wrap">{p.description}</p>}
 
           {/* Tags */}
           {p.tags?.length ? (
@@ -107,11 +98,8 @@ export default function ProductPage() {
             <button
               type="button"
               className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-              onClick={() => {
-                // placeholder; will be wired to cart in Milestone 3
-                console.log('Add to cart:', { id: p.id, title: p.title });
-                alert('Added to cart (placeholder)');
-              }}
+              onClick={handleAddToCart}
+              aria-label={`Add ${p.title} to cart`}
             >
               Add to cart
             </button>
@@ -128,9 +116,7 @@ export default function ProductPage() {
               <li key={r.id} className="rounded border p-3">
                 <div className="text-sm">Rating: {r.rating}</div>
                 {r.description && (
-                  <p className="mt-1 text-sm text-neutral-800">
-                    {r.description}
-                  </p>
+                  <p className="mt-1 text-sm text-neutral-800">{r.description}</p>
                 )}
               </li>
             ))}

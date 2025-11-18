@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react';
-import { ONLINE_SHOP } from '../../api/endpoints';
-import { useApi } from '../../hooks/useApi';
-import { ApiListResponse, Product } from '../../types/product';
 import ProductCard from '../../ui/ProductCard';
+import { useProductsQuery } from '../../api/queries/products';
+import type { Product } from '../../types/product';
 
 type SortOption = 'title-asc' | 'title-desc' | 'price-asc' | 'price-desc';
 
@@ -11,17 +10,14 @@ function effectivePrice(p: Product) {
 }
 
 export default function ProductsPage() {
-  const { data, isLoading, isError } = useApi<ApiListResponse<Product>>(ONLINE_SHOP);
+  const { data, isLoading, isError } = useProductsQuery();
 
-  // UI state
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState<SortOption>('title-asc');
 
-  // Derived data (filter + sort) — recalculates on data or controls change
   const products = useMemo(() => {
     const items = data?.data ?? [];
 
-    // 1) Filter (dynamic search across title/description/tags)
     const q = query.trim().toLowerCase();
     const filtered = q
       ? items.filter((p) => {
@@ -36,25 +32,22 @@ export default function ProductsPage() {
         })
       : items;
 
-    // 2) Sort
     const [key, dir] = sort.split('-') as ['title' | 'price', 'asc' | 'desc'];
 
     const sorted = [...filtered].sort((a, b) => {
       if (key === 'title') {
         const cmp = a.title.localeCompare(b.title, undefined, { sensitivity: 'base' });
         return dir === 'asc' ? cmp : -cmp;
-      } else {
-        const aPrice = effectivePrice(a);
-        const bPrice = effectivePrice(b);
-        const cmp = aPrice - bPrice;
-        return dir === 'asc' ? cmp : -cmp;
       }
+      const aPrice = effectivePrice(a);
+      const bPrice = effectivePrice(b);
+      const cmp = aPrice - bPrice;
+      return dir === 'asc' ? cmp : -cmp;
     });
 
     return sorted;
   }, [data, query, sort]);
 
-  // States
   if (isLoading) return <div className="p-6">Loading products…</div>;
   if (isError) return <div className="p-6 text-red-600">Failed to load products.</div>;
 
@@ -64,7 +57,7 @@ export default function ProductsPage() {
 
       {/* Controls */}
       <section className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        {/* Search (dynamic / as-you-type) */}
+        {/* Search */}
         <label className="flex-1">
           <span className="sr-only">Search products</span>
           <input
