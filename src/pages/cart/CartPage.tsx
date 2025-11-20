@@ -1,5 +1,6 @@
 import type { ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 import { useCart } from '../../store/useCart';
 import { formatCurrency } from '../../utils/currency';
 import { effectivePrice } from '../../types/cart';
@@ -20,6 +21,16 @@ export default function CartPage() {
     const value = Number(event.target.value);
     const next = Number.isNaN(value) ? 0 : value;
     setQty(id, Math.max(0, next));
+  }
+
+  function handleRemove(id: string, title: string) {
+    removeItem(id);
+    toast.success(`Removed "${title}" from cart`);
+  }
+
+  function handleClear() {
+    clear();
+    toast.success('Cart cleared');
   }
 
   return (
@@ -46,7 +57,7 @@ export default function CartPage() {
               <div className="min-w-0 flex-1">
                 <div className="truncate font-medium">{item.title}</div>
                 <div className="text-sm text-neutral-600">
-                  {formatCurrency(unitPrice)} x {item.qty} = {formatCurrency(lineTotal)}
+                  {formatCurrency(unitPrice)} × {item.qty} = {formatCurrency(lineTotal)}
                 </div>
               </div>
 
@@ -66,7 +77,7 @@ export default function CartPage() {
                 <button
                   type="button"
                   className="rounded border px-2 py-1 text-sm"
-                  onClick={() => removeItem(item.id)}
+                  onClick={() => handleRemove(item.id, item.title)}
                 >
                   Remove
                 </button>
@@ -89,7 +100,7 @@ export default function CartPage() {
         <button
           type="button"
           className="rounded-md border px-4 py-2"
-          onClick={clear}
+          onClick={handleClear}
         >
           Clear cart
         </button>

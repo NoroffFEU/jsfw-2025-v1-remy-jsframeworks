@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../store/useCart';
+import { toast } from 'react-hot-toast';
 
 export default function CheckoutSuccessPage() {
   const { clear } = useCart();
 
-  // Clear the cart once when we land on this page
   useEffect(() => {
     clear();
+    toast.success('Order placed successfully');
   }, [clear]);
 
   return (

@@ -4,10 +4,10 @@ import { getDiscountPercent } from '../../utils/discount';
 import { useProductQuery } from '../../api/queries/products';
 import { useCart } from '../../store/useCart';
 import { toCartItem } from '../../types/cart';
+import { toast } from 'react-hot-toast';
 
 export default function ProductPage() {
   const { id } = useParams<{ id: string }>();
-
   const { data, isLoading, isError } = useProductQuery(id);
   const { addItem } = useCart();
 
@@ -22,6 +22,7 @@ export default function ProductPage() {
 
   function handleAddToCart() {
     addItem(toCartItem(p, 1));
+    toast.success(`Added "${p.title}" to cart`);
   }
 
   return (
@@ -52,7 +53,6 @@ export default function ProductPage() {
         <div>
           <h1 className="text-2xl font-semibold">{p.title}</h1>
 
-          {/* Price & discount */}
           <div className="mt-2 flex items-baseline gap-3">
             {hasDiscount ? (
               <>
@@ -71,15 +71,14 @@ export default function ProductPage() {
             )}
           </div>
 
-          {/* Rating */}
           {typeof p.rating === 'number' && (
-            <div className="mt-2 text-sm text-neutral-700">Rating: {p.rating.toFixed(1)}</div>
+            <div className="mt-2 text-sm text-neutral-700">
+              Rating: {p.rating.toFixed(1)}
+            </div>
           )}
 
-          {/* Description */}
           {p.description && <p className="mt-4 whitespace-pre-wrap">{p.description}</p>}
 
-          {/* Tags */}
           {p.tags?.length ? (
             <div className="mt-4 flex flex-wrap gap-2">
               {p.tags.map((t) => (
@@ -93,7 +92,6 @@ export default function ProductPage() {
             </div>
           ) : null}
 
-          {/* Actions */}
           <div className="mt-6">
             <button
               type="button"
@@ -107,7 +105,6 @@ export default function ProductPage() {
         </div>
       </section>
 
-      {/* Reviews */}
       {p.reviews?.length ? (
         <section className="mt-10">
           <h2 className="mb-2 text-lg font-semibold">Reviews</h2>
