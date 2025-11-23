@@ -66,7 +66,7 @@ npm run dev
 ### Running Tests
 
 ```bash
-npm run test
+npx vitest
 ```
 
 ---
@@ -86,6 +86,12 @@ VITE_API_BASE_URL=https://api.noroff.dev/api/v2
 
 This project is part of a course submission and is not open for external contributions.
 However, suggestions and feedback are always welcome.
+
+---
+
+## Deployment
+
+Live site: https://jsfw-react-remylian.netlify.app/
 
 ---
 
