@@ -1,73 +1,99 @@
-# React + TypeScript + Vite
+# JS Frameworks React Webshop
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![image](https://user-images.githubusercontent.com/52622303/164316813-4b12d99f-aeb7-4069-85cf-e72b3a50ac99.png)
 
-Currently, two official plugins are available:
+A fully featured React-based webshop built for the **Noroff JS Frameworks** course.
+The project implements a complete e‑commerce flow including product browsing, product details, cart management, checkout, contact form validation, and API-driven data using modern React tooling.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## Description
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+This webshop demonstrates production-level frontend development using **React + TypeScript**, integrating with the **Noroff Online Shop API**, and implementing:
 
-## Expanding the ESLint configuration
+* API-driven product catalog
+* Dynamic search & sorting
+* Detailed product pages with reviews
+* Persistent shopping cart (LocalStorage)
+* Checkout confirmation flow
+* Fully validated contact form (RHF + Zod)
+* Toast notifications
+* Responsive layout
+* Component/page testing with Vitest
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Built With
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+* [React.js](https://reactjs.org/)
+* [TypeScript](https://www.typescriptlang.org/)
+* [Vite](https://vitejs.dev/)
+* [TailwindCSS](https://tailwindcss.com/)
+* [TanStack Query](https://tanstack.com/query/latest)
+* [React Hook Form](https://react-hook-form.com/)
+* [Zod](https://zod.dev/)
+* [React Router](https://reactrouter.com/)
+* [React Hot Toast](https://react-hot-toast.com/)
+* [Vitest](https://vitest.dev/)
+* [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## Getting Started
+
+### Installing
+
+1. Clone the repository:
+
+```bash
+git clone <repo-url>
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Install dependencies:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
+
+### Running
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+### Running Tests
+
+```bash
+npm run test
+```
+
+---
+
+## Environment Variables
+
+Environment variables are optional for this assignment.
+If needed, create a `.env` file:
+
+```bash
+VITE_API_BASE_URL=https://api.noroff.dev/api/v2
+```
+
+---
+
+## Contributing
+
+This project is part of a course submission and is not open for external contributions.
+However, suggestions and feedback are always welcome.
+
+---
+
+## Contact
+
+* **Author:** Remy Lian
+* **GitHub:** [https://github.com/Remylian](https://github.com/Remylian)
+
+---
+
+
