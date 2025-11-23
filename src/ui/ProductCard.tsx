@@ -39,11 +39,11 @@ export default function ProductCard({ product }: Props) {
         <div className="mt-2 flex items-baseline gap-2">
           {hasDiscount ? (
             <>
-              <span className="text-lg font-semibold">
-                {formatCurrency(discountedPrice)}
+              <span data-testid="price-discounted"  className="text-lg font-semibold">
+                {formatCurrency(product.discountedPrice)}
               </span>
-              <span className="text-sm text-neutral-500 line-through">
-                {formatCurrency(price)}
+              <span data-testid="price-original" className="text-sm text-neutral-500 line-through">
+                {formatCurrency(product.price)}
               </span>
             </>
           ) : (
